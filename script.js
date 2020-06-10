@@ -21,27 +21,31 @@ $(document).ready(function() {
                 }
 
                 guadagni_per_mese[mese_data_corrente - 1] += data[i].amount;
-                console.log(mese_data_corrente);
-                console.log(guadagni_per_mese);
-
-                var config = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Guadagno azienda (€)',
-                            data: guadagni_per_mese,
-                            fill: true,
-                            borderColor: 'rgb(60,179,113)',
-                            backgroundColor: 'rgba(60,179,113,.5)',
-                            lineTension: 0,
-                        }],
-                    },//Data
-                }); //New chart
             }
+            lineChart(months, guadagni_per_mese)
 
         }
     })
 
+    function lineChart(x, y) {
+        var config = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: x,
+                datasets: [{
+                    label: 'Guadagno azienda (€)',
+                    data: y,
+                    fill: true,
+                    borderColor: 'rgb(60,179,113)',
+                    backgroundColor: 'rgba(60,179,113,.5)',
+                    lineTension: 0,
+                }],
+            },//Data
+            // options: {
+            //     // This chart will not respond to mousemove, etc
+            //     events: ['click']
+            // }
+        }); //New chart
+    }
 
 })//Ready
