@@ -1,9 +1,21 @@
 $(document).ready(function() {
 
-    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var months = {
+        'January': 0,
+        'February': 0,
+        'March': 0,
+        'April': 0,
+        'May': 0,
+        'June': 0,
+        'July': 0,
+        'August': 0,
+        'September': 0,
+        'October': 0,
+        'November': 0,
+        'December': 0
+    };
 
 
-    var guadagni_per_mese = [];
     var guadagni_a_testa = {};
     var guadagno_annuale = 0;
 
@@ -17,14 +29,15 @@ $(document).ready(function() {
 
             for (var i = 0; i < data.length; i++) {
 
-                mese_data_corrente = moment(data[i].date, 'DD/MM/YYYY').format('M')
+                //LINE CHART
+                mese_data_corrente = moment(data[i].date, 'DD/MM/YYYY').format('MMMM')
+                console.log(mese_data_corrente);
 
-                if (typeof guadagni_per_mese[mese_data_corrente - 1] == 'undefined') {
-                    guadagni_per_mese[mese_data_corrente - 1] = 0;
-                }
+                months[mese_data_corrente] += data[i].amount;
 
-                guadagni_per_mese[mese_data_corrente - 1] += data[i].amount;
 
+
+                //PIE CHART
                 //Crea oggetto {Salesman: guadagno}
                 if (guadagni_a_testa.hasOwnProperty(data[i].salesman)) {
                     guadagni_a_testa[data[i].salesman] += data[i].amount;
@@ -36,15 +49,12 @@ $(document).ready(function() {
                 guadagno_annuale += data[i].amount
             }
 
-            console.log(guadagni_a_testa);
-            console.log(guadagno_annuale);
-            lineChart(months, guadagni_per_mese)
-
             //Trasforma in percentuale i valori del guadagno a testa
             for (var key in guadagni_a_testa) {
                 guadagni_a_testa[key] = (guadagni_a_testa[key] * 100 / guadagno_annuale).toFixed(1)
             }
 
+            lineChart(Object.keys(months), Object.values(months))
             pieChart(Object.keys(guadagni_a_testa), Object.values(guadagni_a_testa))
 
         }
